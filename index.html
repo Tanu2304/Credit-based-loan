@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan Validation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .success {
+      color: green;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Loan Validation</h2>
+
+  <div class="form-group">
+    <label>Credit Score</label>
+    <input type="number" id="creditScore">
+    <div class="error" id="creditError"></div>
+  </div>
+
+  <div class="form-group">
+    <label>Age</label>
+    <input type="number" id="age">
+    <div class="error" id="ageError"></div>
+  </div>
+
+  <div class="form-group">
+    <label>DTI Ratio</label>
+    <input type="number" step="0.01" id="dti">
+    <div class="error" id="dtiError"></div>
+  </div>
+
+  <div class="form-group">
+    <label>Loan Amount</label>
+    <input type="number" id="loanAmount">
+    <div class="error" id="loanError"></div>
+  </div>
+
+  <div class="form-group">
+    <label>Applicant Income</label>
+    <input type="number" id="income">
+    <div class="error" id="incomeError"></div>
+  </div>
+
+  <div class="form-group">
+    <label>Loan Term</label>
+    <select id="loanTerm">
+      <option value="">Select term</option>
+      <option value="12">12 months</option>
+      <option value="24">24 months</option>
+      <option value="36">36 months</option>
+    </select>
+    <div class="error" id="termError"></div>
+  </div>
+
+  <button onclick="validateForm()">Validate</button>
+
+  <div id="result" class="success"></div>
+</div>
+
+<script>
+function validateForm() {
+  let valid = true;
+
+  // Clear previous errors
+  document.querySelectorAll('.error').forEach(e => e.innerText = "");
+  document.getElementById('result').innerText = "";
+
+  let credit = document.getElementById('creditScore').value;
+  let age = document.getElementById('age').value;
+  let dti = document.getElementById('dti').value;
+  let loan = document.getElementById('loanAmount').value;
+  let income = document.getElementById('income').value;
+  let term = document.getElementById('loanTerm').value;
+
+  // Credit Score
+  if (credit < 300 || credit > 900) {
+    document.getElementById('creditError').innerText = "Credit score must be between 300 and 900";
+    valid = false;
+  }
+
+  // Age
+  if (age < 18 || age > 70) {
+    document.getElementById('ageError').innerText = "Age must be between 18 and 70";
+    valid = false;
+  }
+
+  // DTI
+  if (dti <= 0 || dti > 1) {
+    document.getElementById('dtiError').innerText = "DTI must be between 0.01 and 1.0";
+    valid = false;
+  }
+
+  // Loan Amount
+  if (loan <= 0) {
+    document.getElementById('loanError').innerText = "Loan amount must be greater than 0";
+    valid = false;
+  }
+
+  // Income
+  if (income <= 0) {
+    document.getElementById('incomeError').innerText = "Income must be greater than 0";
+    valid = false;
+  }
+
+  // Loan Term
+  if (term === "") {
+    document.getElementById('termError').innerText = "Please select a loan term";
+    valid = false;
+  }
+
+  if (valid) {
+    document.getElementById('result').innerText = "Loan validation successful ✅";
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Loan Validation</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        background: rgba(255,255,255,0.95);
+        padding: 30px;
+        border-radius: 15px;
+        width: 370px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    input:focus {
+        border-color: #667eea;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #3f424d;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    .result {
+        margin-top: 15px;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .approved {
+        background: #e6fffa;
+        color: green;
+    }
+
+    .conditional {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .rejected {
+        background: #ffe6e6;
+        color: red;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Loan Eligibility Checker</h2>
+
+    <input type="number" id="income" placeholder="Monthly Income (₹)">
+    <input type="number" id="loan" placeholder="Loan Amount (₹)">
+    <input type="number" id="age" placeholder="Age">
+    <input type="number" id="credit" placeholder="Credit Score (300 - 900)">
+
+    <button onclick="validateLoan()">Check Eligibility</button>
+
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+function validateLoan() {
+    let income = document.getElementById("income").value;
+    let loan = document.getElementById("loan").value;
+    let age = document.getElementById("age").value;
+    let credit = document.getElementById("credit").value;
+    let result = document.getElementById("result");
+
+    if (!income || !loan || !age || !credit) {
+        result.innerHTML = "⚠️ Please fill all fields";
+        result.className = "result rejected";
+        return;
+    }
+
+    // Core validation rules
+    if (age < 21 || age > 60) {
+        result.innerHTML = "❌ Rejected: Age not eligible";
+        result.className = "result rejected";
+        return;
+    }
+
+    if (credit >= 300 && income >= 5000 && loan <= income * 12) {
+        result.innerHTML = "✅ Approved: Excellent credit score!";
+        result.className = "result approved";
+    }
+    else if (credit >= 700 && income >= 25000 && loan <= income * 10) {
+        result.innerHTML = "⚠️ Conditionally Approved: Moderate risk";
+        result.className = "result conditional";
+    }
+    else {
+        result.innerHTML = "❌ Rejected: Low credit score or high risk";
+        result.className = "result rejected";
+    }
+}
+</script>
+
+</body>
+</html>
