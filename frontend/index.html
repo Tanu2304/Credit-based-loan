@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CreditWise — AI Loan Approval</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="navbar">
+        <span class="logo">💳 CreditWise</span>
+        <span class="tagline">SecureTrust Bank — AI Loan Portal</span>
+    </div>
+
+    <div class="container">
+        <div class="card form-card">
+            <h2>Loan Application Form</h2>
+            <p class="subtitle">Fill in the applicant details. Our AI model will instantly predict approval.</p>
+
+            <form id="loanForm">
+                <div class="section-title">👤 Personal Info</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Age</label>
+                        <input type="number" id="Age" min="18" max="70" value="30" required />
+                    </div>
+                    <div class="field">
+                        <label>Gender</label>
+                        <select id="Gender">
+              <option>Male</option><option>Female</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Marital Status</label>
+                        <select id="Marital_Status">
+              <option>Married</option><option>Single</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Dependents</label>
+                        <input type="number" id="Dependents" min="0" max="10" value="1" />
+                    </div>
+                    <div class="field">
+                        <label>Education Level</label>
+                        <select id="Education_Level">
+              <option>Graduate</option><option>Postgraduate</option><option>Undergraduate</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Property Area</label>
+                        <select id="Property_Area">
+              <option>Urban</option><option>Semi-Urban</option><option>Rural</option>
+            </select>
+                    </div>
+                </div>
+
+                <div class="section-title">💼 Employment & Income</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Employment Status</label>
+                        <select id="Employment_Status">
+              <option>Salaried</option><option>Self-Employed</option><option>Business</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Employer Category</label>
+                        <select id="Employer_Category">
+              <option>Govt</option><option>Private</option><option>Self</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Applicant Income (₹/month)</label>
+                        <input type="number" id="Applicant_Income" value="50000" />
+                    </div>
+                    <div class="field">
+                        <label>Co-Applicant Income (₹/month)</label>
+                        <input type="number" id="Coapplicant_Income" value="0" />
+                    </div>
+                    <div class="field">
+                        <label>Savings Balance (₹)</label>
+                        <input type="number" id="Savings" value="100000" />
+                    </div>
+                    <div class="field">
+                        <label>Collateral Value (₹)</label>
+                        <input type="number" id="Collateral_Value" value="0" />
+                    </div>
+                </div>
+
+                <div class="section-title">📊 Credit Profile</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Credit Score (300–900)</label>
+                        <input type="number" id="Credit_Score" min="300" max="900" value="700" />
+                    </div>
+                    <div class="field">
+                        <label>Existing Loans</label>
+                        <input type="number" id="Existing_Loans" min="0" max="10" value="0" />
+                    </div>
+                    <div class="field">
+                        <label>DTI Ratio (0.0–1.0)</label>
+                        <input type="number" id="DTI_Ratio" step="0.01" min="0" max="1" value="0.25" />
+                    </div>
+                </div>
+
+                <div class="section-title">🏦 Loan Details</div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label>Loan Amount (₹)</label>
+                        <input type="number" id="Loan_Amount" value="500000" />
+                    </div>
+                    <div class="field">
+                        <label>Loan Term (months)</label>
+                        <select id="Loan_Term">
+              <option>12</option><option>24</option><option>36</option>
+              <option>60</option><option>84</option><option selected>120</option>
+              <option>180</option><option>240</option><option>360</option>
+            </select>
+                    </div>
+                    <div class="field">
+                        <label>Loan Purpose</label>
+                        <select id="Loan_Purpose">
+              <option>Home</option><option>Education</option>
+              <option>Personal</option><option>Business</option>
+            </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+          🤖 Predict Loan Approval
+        </button>
+            </form>
+        </div>
+
+        <!-- Result Card -->
+        <div class="card result-card" id="resultCard" style="display:none;">
+            <h2>AI Prediction Result</h2>
+            <div id="resultBadge" class="result-badge"></div>
+            <div class="confidence-bar-wrap">
+                <span>Approval Probability</span>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" id="confFill"></div>
+                </div>
+                <span id="confLabel"></span>
+            </div>
+            <div class="prob-grid">
+                <div class="prob-box approved">
+                    <span>✅ Approved</span>
+                    <strong id="approvedProb"></strong>
+                </div>
+                <div class="prob-box rejected">
+                    <span>❌ Rejected</span>
+                    <strong id="rejectedProb"></strong>
+                </div>
+            </div>
+            <div class="factors">
+                <h4>🔑 Top Influencing Factors</h4>
+                <ul id="factorList"></ul>
+            </div>
+            <button onclick="document.getElementById('resultCard').style.display='none'" class="btn-reset">
+        ← New Application
+      </button>
+        </div>
+
+        <div id="errorBox" class="error-box" style="display:none;"></div>
+    </div>
+
+    <footer>Built with ❤️ using Flask + Random Forest | CreditWise © 2026</footer>
+    <script src="app.js"></script>
+</body>
+
+</html>
