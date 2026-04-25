@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditWise Result</title>
+
+<style>
+body {
+    background: #0d0d0d;
+    color: #e6e6e6;
+    font-family: "Courier New", monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.terminal {
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 10px;
+    width: 420px;
+    box-shadow: 0 0 20px rgba(0,255,0,0.2);
+    line-height: 1.8;
+}
+
+.title {
+    color: #00ffcc;
+    margin-bottom: 15px;
+}
+
+.approved { color: #00ff00; }
+.rejected { color: #ff4d4d; }
+.error { color: #ffa500; }
+
+input {
+    width: 100%;
+    padding: 6px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: none;
+    font-family: monospace;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: #00ccff;
+    cursor: pointer;
+    font-family: monospace;
+}
+
+button:hover {
+    background: #0099cc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="terminal">
+
+<div id="formSection">
+    <div class="title">CreditWise Input</div>
+
+    <input type="text" id="name" placeholder="Enter Name">
+    <input type="number" id="income" placeholder="Monthly Income">
+    <input type="number" id="credit" placeholder="Credit Score (300-900)">
+    <input type="number" id="loan" placeholder="Loan Amount">
+
+    <button onclick="generateResult()">Run Check</button>
+</div>
+
+<div id="output" style="display:none;"></div>
+
+</div>
+
+<script>
+
+function simulateServer() {
+    return Math.random() > 0.2;
+}
+
+function generateResult() {
+
+    const name = document.getElementById("name").value;
+    const income = parseFloat(document.getElementById("income").value);
+    const credit = parseFloat(document.getElementById("credit").value);
+    const loan = parseFloat(document.getElementById("loan").value);
+    const output = document.getElementById("output");
+
+    // Validation
+    if (!name || !income || !credit || !loan) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    if (!simulateServer()) {
+        output.style.display = "block";
+        output.innerHTML = `
+        <div class="title">CreditWise Result</div>
+        <div class="error">Server Offline</div>
+        `;
+        return;
+    }
+
+    // Logic
+    let score = 0;
+
+    if (credit >= 750) score += 40;
+    else if (credit >= 650) score += 25;
+    else score += 10;
+
+    if (income > loan * 0.5) score += 30;
+    else score += 10;
+
+    score += Math.floor(Math.random() * 30); // slight variation
+
+    let status = score >= 60 ? "APPROVED" : "REJECTED";
+    let className = score >= 60 ? "approved" : "rejected";
+
+    document.getElementById("formSection").style.display = "none";
+    output.style.display = "block";
+
+    output.innerHTML = `
+    <div class="title">CreditWise Result | ${new Date().toLocaleDateString()}</div>
+    <div>Name: ${name}</div>
+    <div>Prediction: <span class="${className}">${status}</span></div>
+    <div>Confidence: ${score}%</div>
+    <div>Credit Score: ${credit}</div>
+    <div>Income: ₹${income}</div>
+    <div>Loan Requested: ₹${loan}</div>
+    `;
+}
+
+</script>
+
+</body>
+</html>

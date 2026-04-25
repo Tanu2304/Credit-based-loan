@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Loan Management Dashboard</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background: #2c3e50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .container {
+        display: flex;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        flex: 1;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        background: #27ae60;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        background: #219150;
+    }
+
+    .result {
+        margin-top: 15px;
+        padding: 15px;
+        background: #222;
+        color: #fff;
+        border-radius: 8px;
+        font-family: monospace;
+    }
+
+    .approved {
+        color: #2ecc71;
+    }
+
+    .rejected {
+        color: #e74c3c;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .stat-box {
+        text-align: center;
+        padding: 10px;
+        background: #ecf0f1;
+        border-radius: 8px;
+        width: 30%;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Automated Loan Analytics Dashboard</h1>
+</header>
+
+<div class="container">
+
+    <!-- Loan Application -->
+    <div class="card">
+        <h2>Apply for Loan</h2>
+
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="number" id="income" placeholder="Monthly Income">
+        <input type="number" id="creditScore" placeholder="Credit Score (300-900)">
+        <input type="number" id="loanAmount" placeholder="Loan Amount">
+
+        <select id="employment">
+            <option value="">Employment Type</option>
+            <option value="salaried">Salaried</option>
+            <option value="self">Self-Employed</option>
+        </select>
+
+        <button onclick="evaluateLoan()">Submit Application</button>
+
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <!-- Analytics Dashboard -->
+    <div class="card">
+        <h2>Analytics</h2>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h3 id="totalApps">0</h3>
+                <p>Total Applications</p>
+            </div>
+
+            <div class="stat-box">
+                <h3 id="approvedCount">0</h3>
+                <p>Approved</p>
+            </div>
+
+            <div class="stat-box">
+                <h3 id="rejectedCount">0</h3>
+                <p>Rejected</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:20px;">Recent Decisions</h3>
+        <ul id="history"></ul>
+    </div>
+
+</div>
+
+<script>
+let total = 0;
+let approved = 0;
+let rejected = 0;
+
+function evaluateLoan() {
+    const name = document.getElementById("name").value;
+    const income = parseInt(document.getElementById("income").value);
+    const creditScore = parseInt(document.getElementById("creditScore").value);
+    const loanAmount = parseInt(document.getElementById("loanAmount").value);
+    const employment = document.getElementById("employment").value;
+
+    let decision = "REJECTED";
+    let confidence = 50;
+    let factor = "Income";
+
+    // Simple logic (can be replaced by ML later)
+    if (creditScore > 700 && income > loanAmount * 0.5) {
+        decision = "APPROVED";
+        confidence = Math.floor(75 + Math.random() * 20);
+        factor = "Credit Score";
+    } else if (creditScore > 650) {
+        decision = "APPROVED";
+        confidence = 65;
+        factor = "Balanced Profile";
+    }
+
+    // Update stats
+    total++;
+    if (decision === "APPROVED") approved++;
+    else rejected++;
+
+    document.getElementById("totalApps").innerText = total;
+    document.getElementById("approvedCount").innerText = approved;
+    document.getElementById("rejectedCount").innerText = rejected;
+
+    // Show result
+    const resultDiv = document.getElementById("result");
+    resultDiv.style.display = "block";
+
+    resultDiv.innerHTML = `
+CreditWise Result | ${new Date().toDateString()}<br>
+Prediction: <span class="${decision === 'APPROVED' ? 'approved' : 'rejected'}">${decision}</span><br>
+Confidence: ${confidence}%<br>
+Top Factor: ${factor}
+    `;
+
+    // Add to history
+    const history = document.getElementById("history");
+    const li = document.createElement("li");
+    li.textContent = `${name} - ${decision}`;
+    history.prepend(li);
+}
+</script>
+
+</body>
+</html>
+  
